@@ -27,12 +27,19 @@ namespace KarateSchoolProject
             if (user != null && user.UserPassword == password)
             {
                 // Successful login: Redirect to a page.
-                FormsAuthentication.SetAuthCookie(user.UserName, false);
+                FormsAuthentication.SetAuthCookie(user.UserName, true);
+                Session["username"] = username;
                 
                 if (user.UserType == UserType.Member)
                 {
 
                     Response.Redirect("Member.aspx");
+                }
+
+                else if (user.UserType == UserType.Instructor)
+                {
+
+                    Response.Redirect("Instructor.aspx");
                 }
                 else if (user.UserType == UserType.Administrator)
                 {

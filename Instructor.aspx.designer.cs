@@ -11,34 +11,39 @@ namespace KarateSchoolProject
 {
 
 
-    public partial class SiteMaster
+    public partial class Instructor1
     {
 
         /// <summary>
-        /// lblUsername control.
+        /// lblInstructorName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUsername;
+        protected global::System.Web.UI.WebControls.Label lblInstructorName;
 
         /// <summary>
-        /// btnSignout control.
+        /// gvSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSignout;
+        protected global::System.Web.UI.WebControls.GridView gvSection;
 
         /// <summary>
-        /// MainContent control.
+        /// Master property.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Auto-generated property.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        public new KarateSchoolProject.SiteMaster Master
+        {
+            get
+            {
+                return ((KarateSchoolProject.SiteMaster)(base.Master));
+            }
+        }
     }
 }

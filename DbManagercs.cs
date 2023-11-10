@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -30,23 +31,33 @@ namespace KarateSchoolProject
             }
         }
 
+
+        public Instructor getUserInstroctor(string username)
+        {
+            using (var _db = new KarateSchoolDBDataContext(connectionString))
+            {
+                var user = getUser(username);
+                var member = _db.Instructors.FirstOrDefault(m => m.InstructorID == user.UserID);
+                return member;
+            }
+
+
+        }
         public DataTable GetSectionData(string username, bool isMember)
         {
             DataTable dataTable = new DataTable();
 
             using (var _db = new KarateSchoolDBDataContext(connectionString))
             {
-                List<SectionModel> sections;
+                List<SectionModelMember> sections;
                 var user = getUser(username);
-                if (isMember)
-                {
-                    sections = _db.Sections
+                sections = _db.Sections
                     .Where(s => s.Member_ID == user.UserID)
                     .Join(
                         _db.Instructors,
                         section => section.Instructor_ID,
                         instructor => instructor.InstructorID,
-                        (section, instructor) => new SectionModel
+                        (section, instructor) => new SectionModelMember
                         {
                             InstructorName = $"{instructor.InstructorFirstName} {instructor.InstructorLastName}",
                             SectionFee = section.SectionFee,
@@ -55,12 +66,7 @@ namespace KarateSchoolProject
                         }
                         )
                     .ToList();
-                }
-                else
-                {
-                    sections = new List<SectionModel>();
-                }
-               // else sections =_db.Sections.Where(s => s.Instructor_ID==user.UserID).ToList();
+                // else sections =_db.Sections.Where(s => s.Instructor_ID==user.UserID).ToList();
 
                 // Convert the LINQ result to a DataTable.
                 dataTable.Columns.Add("SectionName");
@@ -84,14 +90,65 @@ namespace KarateSchoolProject
             return dataTable;
         }
 
+
+        public DataTable GetSectionDataForInstructor(string username)
+        {
+            DataTable dataTable = new DataTable();
+
+            using (var _db = new KarateSchoolDBDataContext(connectionString))
+            {
+                List<SectionModelInstructor> sections;
+                var user = getUser(username);
+                sections = _db.Sections
+                    .Where(s => s.Instructor_ID == user.UserID)
+                    .Join(
+                        _db.Members,
+                        section => section.Member_ID,
+                        member => member.Member_UserID,
+                        (section, member) => new SectionModelInstructor
+                        {
+                            MemberName = $"{member.MemberFirstName} {member.MemberLastName}",
+                            SectionName = section.SectionName
+                        }
+                        )
+                    .ToList();
+                // else sections =_db.Sections.Where(s => s.Instructor_ID==user.UserID).ToList();
+
+                // Convert the LINQ result to a DataTable.
+                dataTable.Columns.Add("SectionName");
+                dataTable.Columns.Add("MemberName");
+
+                foreach (var section in sections)
+                {
+                    DataRow row = dataTable.NewRow();
+                    row["SectionName"] = section.SectionName;
+                    row["MemberName"] = section.MemberName;
+                    dataTable.Rows.Add(row);
+                }
+
+
+            }
+
+            return dataTable;
+        }
+
     }
 
-    public partial class SectionModel
+    public partial class SectionModelInstructor
     {
         public string SectionName { get;set; }
-        public DateTime SectionStartDate { get;set; }
-        public decimal SectionFee { get;set; }
-        public string InstructorName { get;set;
+        public string MemberName { get;set;
+        }
+    }
+
+    public partial class SectionModelMember
+    {
+        public string SectionName { get; set; }
+        public decimal SectionFee { get; set; }
+        public DateTime SectionStartDate { get; set; }
+        public string InstructorName
+        {
+            get; set;
         }
     }
 

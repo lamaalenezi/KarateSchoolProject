@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -13,16 +14,24 @@ namespace KarateSchoolProject
         private DbManager _dbManager = new DbManager();
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("Login.aspx");
+            }
+
+            string username = (string)Session["username"];// User.Identity.Name;
+
+            if (String.IsNullOrEmpty(username))
+            {
+                Response.Redirect("Login.aspx");
+            }
+
+
             if (!IsPostBack)
             {
-                if (!User.Identity.IsAuthenticated)
-                {
-                    Response.Redirect("Login.aspx");
-                }
 
-                // Get the logged-in member's username.
-                string username = User.Identity.Name;
-                
+                Master.loggedUser = username;
+
                 // Display the member's name.
                 lblMemberName.Text = GetMemberName(username);
 

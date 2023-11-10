@@ -129,6 +129,7 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Instructor.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Member.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -227,6 +228,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Instructor.aspx.cs">
+      <DependentUpon>Instructor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Instructor.aspx.designer.cs">
+      <DependentUpon>Instructor.aspx</DependentUpon>
     </Compile>
     <Compile Include="KarateSchoolDB.designer.cs">
       <AutoGen>True</AutoGen>

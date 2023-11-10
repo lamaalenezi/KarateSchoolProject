@@ -40,5 +40,19 @@ namespace KarateSchoolProject
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTotalFee;
+
+        /// <summary>
+        /// Master property.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated property.
+        /// </remarks>
+        public new KarateSchoolProject.SiteMaster Master
+        {
+            get
+            {
+                return ((KarateSchoolProject.SiteMaster)(base.Master));
+            }
+        }
     }
 }

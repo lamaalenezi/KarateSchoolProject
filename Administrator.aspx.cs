@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -36,21 +37,42 @@ namespace KarateSchoolProject
 
         protected void AssignMemberBtn_Click(object sender, EventArgs e)
         {
-            using (conn) { 
-            Member memberSelect = InstructorGridView.SelectedValue as Member;
-            string memID = memberSelect.Member_UserID.ToString();
+            
 
-                
-            //if already assigned a section
-            string query = "SELECT [Member_ID] FROM Section WHERE [Member_ID]=" + memID;
+                using (conn)
+                {
+                    string memID = MemberGridView.SelectedValue.ToString();
+                    conn.Open();
 
-            //if assigning new
-            string query2 = "INSERT INTO Section (SectionName, SectionStartDate, Member_ID, Instructor_ID, SectionFee)" +
-                             "VALUES ('Karate Age-Uke', '11/12/2023 12:00:00 AM', " + memID + ", 2, 500.0000);";
-            SqlCommand cmd = new SqlCommand(query2, conn);
+                    // Check if MemberID is used in the sections table
+                    string checkQuery = "SELECT COUNT(*) FROM Sections WHERE Member_UserID = @Member_UserID";
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, conn))
+                {
+                    checkCommand.Parameters.AddWithValue("@Member_UserID", memID);
 
-                conn.Close();
-        }
+                    int count = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        if (SectionDropDownList.ToString() == "Karate Age-Uke")
+                        {
+                            string deleteQuery = "DELETE FROM YourTableName WHERE MemberID = @MemberID";
+                            using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, conn))
+                            {
+                                deleteCommand.Parameters.AddWithValue("@MemberID", memID);
+
+                                deleteCommand.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+
+
+                }
+                }
         }
 
         protected void MemberGridView_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,8 +129,46 @@ namespace KarateSchoolProject
 
         protected void MemberGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            MemberGridView.DeleteRow(e.RowIndex);
+            GridViewRow row = MemberGridView.Rows[e.RowIndex];
+            int memberID = Convert.ToInt32(MemberGridView.DataKeys[e.RowIndex].Value); 
+
+           
+            using (SqlConnection connection = new SqlConnection(connString))
+            {
+                connection.Open();
+
+                
+                string query = "DELETE FROM Member WHERE Member_UserID = @Member_UserID";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Member_UserID", memberID);
+
+                    
+                    command.ExecuteNonQuery();
+                }
+            }
+            KarateSchool.DataBind();
+        }
+
+        protected void InstructorGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            GridViewRow row = MemberGridView.Rows[e.RowIndex];
+            int instrID = Convert.ToInt32(MemberGridView.DataKeys[e.RowIndex].Value);
+
             
+            using (SqlConnection connection = new SqlConnection(connString))
+            {
+                connection.Open();
+
+                
+                string query = "DELETE FROM Instructor WHERE InstructorID = @InstructorID";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@InstructorID", instrID); 
+                    command.ExecuteNonQuery();
+                }
+            }
+            KarateSchool.DataBind();
         }
     }
 }

@@ -11,7 +11,7 @@
     <asp:SqlDataSource ID="KarateSections" runat="server" ConnectionString="<%$ ConnectionStrings:KarateSchoolConnectionString2 %>" SelectCommand="SELECT [SectionName] FROM [Section]"></asp:SqlDataSource>
     <br />
     <asp:GridView ID="MemberGridView" runat="server" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" DataSourceID="KarateSchool" ForeColor="Black" GridLines="Horizontal" Height="289px" Style="margin-right: 4px" Width="638px" OnSelectedIndexChanged="MemberGridView_SelectedIndexChanged1" 
-             OnRowDeleting="MemberGridView_RowDeleting" AutoGenerateColumns="False">
+             OnRowDeleting="MemberGridView_RowDeleting" DataKeys="Member_UserID" AutoGenerateColumns="False">
         <Columns>
             <asp:CommandField ShowSelectButton="True"></asp:CommandField>
             <asp:BoundField DataField="MemberFirstName" HeaderText="First Name" SortExpression="MemberFirstName" />
@@ -68,7 +68,8 @@
     <br />
     
     <br />
-    <asp:GridView ID="InstructorGridView" runat="server" AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" DataSourceID="KarateSchoolInstructor" ForeColor="Black" GridLines="Horizontal" Height="189px" Width="643px">
+    <asp:GridView ID="InstructorGridView" runat="server" AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" DataSourceID="KarateSchoolInstructor" ForeColor="Black" GridLines="Horizontal" Height="189px" Width="643px"
+        OnRowDeleting="InstructorGridView_RowDeleting" DataKeys="InstructorID">
         <Columns>
             <asp:CommandField ShowSelectButton="True" />
             <asp:BoundField DataField="InstructorFirstName" HeaderText="First Name" SortExpression="InstructorFirstName" />

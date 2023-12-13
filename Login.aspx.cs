@@ -43,8 +43,9 @@ namespace KarateSchoolProject
                 }
                 else if (user.UserType == UserType.Administrator)
                 {
-                    Response.Redirect("Default.aspx");
+                    Response.Redirect("Administrator.aspx");
                 }
+                
 
             }
             else
